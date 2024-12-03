@@ -10,3 +10,40 @@
 - This dataset contains 440833 rows with the following columns: ['Age', 'Gender', 'Tenure', 'Usage Frequency', 'Support Calls','Payment Delay', 'Subscription Type', 'Contract Length', 'Total Spend',
 'Last Interaction', **'Churn'**]. 
 - Upload the csv file to the S3 bucket from step 1.
+
+3. Copy data from S3 to Redshift
+- Create a cluster using Redshift ensuring the cluster can be accessed via 
+a public ip. Ensure the security group is set such that only your machine
+ip can access it
+- Use DBeaver (or any other client) to connect to the Redshift DB
+- Create a table `customers` following the same schema as the csv columns
+```sh
+create table customers (
+CustomerID INT primary key,
+Age INT,
+Gender VARCHAR,
+Tenure INT,
+"Usage Frequency" INT,
+"Support Calls" INT,
+"Payment Delay" INT,
+"Subscription Type" VARCHAR,
+"Contract Length" VARCHAR,
+"Total Spend" INT,
+"Last Interaction" INT,
+Churn INT)
+```
+- Copy S3 csv to the new table
+```sh
+COPY customers
+FROM 's3://your-bucket-name/your-file.csv'
+IAM_ROLE 'arn:aws:iam::your-account-id:role/your-redshift-role'
+DELIMITER ',' 
+IGNOREHEADER 1 
+CSV;
+```
+- Verify and preview the data
+```sh
+SELECT * FROM customers LIMIT 10;
+```
+    - for troubleshooting, check the schema and the sequence of the columns
+    in the csv carefully and ensure they match with the table.
