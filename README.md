@@ -47,3 +47,9 @@ SELECT * FROM customers LIMIT 10;
 ```
     - for troubleshooting, check the schema and the sequence of the columns
     in the csv carefully and ensure they match with the table.
+
+4. Great, you have the data to work with now. Let's perform some enrichment by adding an additional column containing avg spend per day :
+```sh
+alter table customers add column avg_spend FLOAT;
+update customers set avg_spend = "total spend" /tenure;
+```
