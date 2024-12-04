@@ -53,3 +53,11 @@ SELECT * FROM customers LIMIT 10;
 alter table customers add column avg_spend FLOAT;
 update customers set avg_spend = "total spend" /tenure;
 ```
+
+## Phase 2: Model training
+2.1 Create a poetry environment
+```sh
+curl -sSL https://install.python-poetry.org | python3 -
+poetry init
+poetry add pandas scikit-learn psycopg2-binary
+```
